@@ -25,4 +25,8 @@ public class MovieArticleService {
 	public List<MovieArticle> getMovieArticles() {
 		return movieArticleDao.getMovieArticles();
 	}
+	
+	public MovieArticle getMovieArticle(int id) {
+		return movieArticleDao.getMovieArticle(id);
+	}
 }

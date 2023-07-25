@@ -207,6 +207,7 @@ public class MemberController extends Controller {
 		System.out.printf("1. 회원정보 수정\n");
 		System.out.printf("2. 나의 예매 현황\n");
 		System.out.printf("3. 나의 리뷰\n");
+		System.out.printf("4. 회원 탈퇴\n");
 		System.out.printf("9. 이전 단계로\n\n");
 		System.out.printf("선택 : ");
 		int selectNum = sc.nextInt();
@@ -222,9 +223,26 @@ public class MemberController extends Controller {
 		case 3:
 			showReviewList();
 			break;
+		case 4:
+			withdrawal();
+			break;
 		case 9:
 			break;
 		}
+	}
+
+	private void withdrawal() {
+		Member loginedMember = Container.getSession().getLoginedMember();
+		System.out.printf("비밀번호를 입력하세요 : ");
+		String loginPw = sc.next();
+		
+		if(loginedMember.loginPw.equals(loginPw)==false) {
+			System.out.println("비밀번호가 틀렸습니다.");
+			return;
+		}
+		memberService.delete(loginedMember.id);
+		System.out.println("회원 탈퇴 하였습니다.");
+		
 	}
 
 	private void doModify() {
@@ -266,9 +284,17 @@ public class MemberController extends Controller {
 		Seat seat;
 		for (int i = 0; i <= getForPrintSeat.size() - 1; i++) {
 			seat = getForPrintSeat.get(i);
-			System.out.printf("%s ", seat.title);
+			System.out.printf("\n%d | %s | %s \n",seat.id,seat.movieTitle, seat.title);
 		}
 		System.out.println("입니다.\n");
+		System.out.println();
+		
+		System.out.printf("취소할 영화 선택 :  ");
+		
+		int menu = sc.nextInt();
+		
+		Container.seatService.doDeleteSeat(menu);
+		System.out.println("예매가 취소 되었습니다.");
 	}
 
 	private void showReviewList() {

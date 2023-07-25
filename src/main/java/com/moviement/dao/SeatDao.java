@@ -16,14 +16,14 @@ public class SeatDao extends Dao {
 		dbConnection = Container.getDBConnection();
 	}
 
-	public int doTicketing(String[] titles) {
+	public int doTicketing(String movieTitle, String[] titles) {
 		Member loginedMember = Container.getSession().getLoginedMember();
 		String title;
 		int rn = 0;
 
 		for (int i = 0; i < titles.length; i++) {
 			title = titles[i];
-			String sql = String.format("INSERT INTO seats (regDate, title, nickName) VALUES (NOW(), '%s', '%s')", title,
+			String sql = String.format("INSERT INTO seats (regDate, movieTitle, title, nickName) VALUES (NOW(), '%s', '%s', '%s')",movieTitle, title,
 					loginedMember.nickName);
 			int rnn = dbConnection.insert(sql);
 			rn += rnn;
@@ -74,4 +74,14 @@ public class SeatDao extends Dao {
 		}
 		return new Seat(row);
 	}
+	
+	public int deleteSeat(int id) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("DELETE FROM seats "));
+		sb.append(String.format("WHERE id = '%d' ", id));
+
+		return dbConnection.delete(sb.toString());
+	}
+	
 }

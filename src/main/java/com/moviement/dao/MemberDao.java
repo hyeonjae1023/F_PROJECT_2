@@ -100,4 +100,13 @@ public class MemberDao {
 		
 		return dbConnection.update(sb.toString());
 	}
+
+	public int delete(int id) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("DELETE FROM `member` "));
+		sb.append(String.format("WHERE id = '%d' ", id));
+
+		return dbConnection.delete(sb.toString());
+	}
 }

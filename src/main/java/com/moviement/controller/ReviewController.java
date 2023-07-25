@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.moviement.container.Container;
+import com.moviement.dto.Member;
 import com.moviement.dto.MovieArticle;
 import com.moviement.dto.Review;
 import com.moviement.service.MemberService;
@@ -77,6 +78,7 @@ public class ReviewController extends Controller {
 			System.out.println("로그인 후 이용해주세요.\n");
 			return;
 		}
+		Member loginedMember = Container.getSession().getLoginedMember();
 		List<MovieArticle> forPrintMovieArticles = movieArticleService.getMovieArticles();
 		MovieArticle movieArticle;
 		
@@ -89,6 +91,17 @@ public class ReviewController extends Controller {
 		System.out.println("영화 선택 : ");
 		int choiceMovieArticleBoardId = sc.nextInt();
 		
+		MovieArticle getMovieArticle = movieArticleService.getMovieArticle(choiceMovieArticleBoardId);
+		String reviewTitle = getMovieArticle.title;
+		System.out.printf("==%s 리뷰 작성==\n",reviewTitle);
+		System.out.printf("평점 : ");
+		float grades = sc.nextFloat();
+		sc.nextLine();
+		
+		System.out.printf("리뷰 내용 : ");
+		String reviewBody = sc.nextLine();
+		reviewService.write(reviewTitle, reviewBody,loginedMember.nickName, grades);
+		System.out.println("리뷰가 작성되었습니다.");
 	}
 
 	public void doModify() {
@@ -119,5 +132,28 @@ public class ReviewController extends Controller {
 			System.out.println("로그인 후 이용해주세요.\n");
 			return;
 		}
+		
+		Member loginedMember = Container.getSession().getLoginedMember();
+		List<Review> forPrintReviews = reviewService.getReviews();
+		Review review;
+		
+		System.out.println(" 번호 | 제목 | 내용 | 닉네임");
+		for (int i = 0; i <= forPrintReviews.size()-1; i++) {
+			review = forPrintReviews.get(i);
+			System.out.printf("%3d | %s | %s | %s \n", review.id, review.title,review.body,review.name);
+		}
+		System.out.println();
+		System.out.println("리뷰 선택 : ");
+		int choiceReviewId = sc.nextInt();
+		
+		Review getReview = reviewService.getReview(choiceReviewId);
+		String nickName = getReview.name;
+		
+		if(loginedMember.nickName.equals(nickName)==false) {
+			System.out.println("권한이 없습니다.");
+			return;
+		}
+		reviewService.delete(choiceReviewId);
+		System.out.println("리뷰가 삭제되었습니다.");
 	}
 }

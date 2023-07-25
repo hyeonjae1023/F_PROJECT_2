@@ -22,10 +22,14 @@ public class SeatService {
 		return seatDao.getForPrintSeats(nickName);
 	}
 
-	public int doTicketing(String[] titles) {
-		return seatDao.doTicketing(titles);
+	public int doTicketing(String movieTitle, String[] titles) {
+		return seatDao.doTicketing(movieTitle, titles);
 	}
 
+	public int doDeleteSeat(int id) {
+		return seatDao.deleteSeat(id);
+	}
+	
 	public List<Seat> getSeats() {
 		return seatDao.getSeats();
 	}

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.moviement.container.Container;
 import com.moviement.db.DBConnection;
+import com.moviement.dto.MovieArticle;
 import com.moviement.dto.Review;
 
 public class ReviewDao {
@@ -22,10 +23,10 @@ public class ReviewDao {
 		sb.append(String.format("SET regDate = NOW(), "));
 		sb.append(String.format("updateDate = NOW(), "));
 		sb.append(String.format("title = '%s', ", review.title));
-		sb.append(String.format("boardId = '%d', ", review.boardId));
+		sb.append(String.format("`body` = '%s', ", review.body));
 		sb.append(String.format("`name` = '%s', ", review.name));
-		sb.append(String.format("grades = '%.1f', ", review.grades));
-	
+		sb.append(String.format("grades = %.1f ", review.grades));
+		
 		return dbConnection.insert(sb.toString());
 	}
 	
@@ -96,5 +97,14 @@ public class ReviewDao {
 			return null;
 		}
 		return new Review(row);
+	}
+	
+	public int delete(int id) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("DELETE FROM review "));
+		sb.append(String.format("WHERE id = '%d' ", id));
+
+		return dbConnection.delete(sb.toString());
 	}
 }

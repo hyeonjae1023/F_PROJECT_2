@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.moviement.container.Container;
 import com.moviement.dao.ReviewDao;
+import com.moviement.dto.MovieArticle;
 import com.moviement.dto.Review;
 
 public class ReviewService {
@@ -31,5 +32,14 @@ public class ReviewService {
 	
 	public void modifyReview(int id, String body, float grades) {
 		reviewDao.modifyReview(id, body, grades);
+	}
+	
+	public int write(String reviewTitle,String body, String name, float grades) {
+		Review review = new Review(reviewTitle, body, name, grades);
+		return reviewDao.doWrite(review);
+	}
+	
+	public void delete(int id) {
+		reviewDao.delete(id);
 	}
 }

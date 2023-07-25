@@ -41,7 +41,7 @@ public class MovieArticleController extends Controller {
 	public void showMovieList() {
 		List<MovieArticle> forPrintMovieArticles = movieArticleService.getMovieArticles();
 		MovieArticle movieArticle, recommend;
-		int j = 1;
+//		int j = 1;
 
 		System.out.print("=== === === Movie List === === ===\n\n");
 		System.out.println(" 번호 | 제목");
@@ -49,9 +49,11 @@ public class MovieArticleController extends Controller {
 		for (int i = forPrintMovieArticles.size(); i > 0; i--) {
 			movieArticle = forPrintMovieArticles.get(i-1);
 
-			System.out.printf("%3d | %s\n", j, movieArticle.title);
-			j++;
+			System.out.printf("%3d | %s\n", movieArticle.id, movieArticle.title);
+		
+//			j++;
 		}
+		
 		System.out.println();
 
 		while (true) {
@@ -73,15 +75,7 @@ public class MovieArticleController extends Controller {
 				continue;
 			}
 			if (selectNum == 2) {
-				System.out.println("예매를 원하시는 해당 영화의 번호를 입력해주세요.");
-				System.out.print("선택 : ");
-				selectNum = sc.nextInt();
-				System.out.println();
-				if (selectNum > forPrintMovieArticles.size() || selectNum < 0) {
-					System.out.println("입력한 번호를 확인 후 다시 입력해주세요.");
-					continue;
-				}
-				doTicketing();
+				doTicketing();				
 			}
 			else {
 				System.out.println("입력한 번호를 확인 후 다시 입력해주세요.\n");
@@ -95,7 +89,21 @@ public class MovieArticleController extends Controller {
 			System.out.println("로그인 후 이용해주세요.\n");
 			return;
 		}
-
+		List<MovieArticle> forPrintMovieArticles = movieArticleService.getMovieArticles();
+		
+		System.out.println("예매를 원하시는 해당 영화의 번호를 입력해주세요.");
+		System.out.print("선택 : ");
+		
+		selectNum = sc.nextInt();
+		System.out.println();
+		
+		MovieArticle movieArticle = movieArticleService.getMovieArticle(selectNum);
+		
+		if (selectNum > forPrintMovieArticles.size() || selectNum < 0) {
+			System.out.println("입력한 번호를 확인 후 다시 입력해주세요.");
+			return;
+		}
+		
 		while (true) {
 			System.out.println("인원을 입력해주세요.");
 			System.out.print("입력 : ");
@@ -120,6 +128,7 @@ public class MovieArticleController extends Controller {
 				seatArr[i] = selectSeat;
 			}
 			System.out.println();
+			System.out.printf("%s\n",movieArticle.title);
 			System.out.printf("선택하신 좌석은 %s입니다.\n\n", Arrays.toString(seatArr));
 			System.out.println("1. 예매하기");
 			System.out.println("9. 이전 단계로\n");
@@ -128,7 +137,7 @@ public class MovieArticleController extends Controller {
 
 			switch (yesOrNo) {
 			case 1: // 여기서 진짜 예매 진행
-				Container.seatService.doTicketing(seatArr);
+				Container.seatService.doTicketing(movieArticle.title,seatArr);
 				break;
 			case 9:
 				System.out.println("초기 화면으로 돌아갑니다.\n");

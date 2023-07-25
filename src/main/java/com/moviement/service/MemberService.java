@@ -43,4 +43,8 @@ public class MemberService {
 	public void modifyNickName(String nickName) {
 		memberDao.modifyNickName(nickName);
 	}
+	
+	public void delete(int id) {
+		memberDao.delete(id);
+	}
 }
