@@ -5,20 +5,25 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.moviement.container.Container;
+import com.moviement.dto.Member;
 import com.moviement.dto.MovieArticle;
+import com.moviement.dto.Seat;
 import com.moviement.service.MemberService;
 import com.moviement.service.MovieArticleService;
+import com.moviement.service.SeatService;
 
 public class MovieArticleController extends Controller {
 	private Scanner sc;
 	private int selectNum;
 	private MemberService memberService;
+	private SeatService seatService;
 	private MovieArticleService movieArticleService;
 	private Session session;
 
 	public MovieArticleController(Scanner isc) {
 		this.sc = isc;
 		memberService = Container.memberService;
+		seatService = Container.seatService;
 		movieArticleService = Container.movieArticleService;
 		session = Container.getSession();
 	}
@@ -59,6 +64,7 @@ public class MovieArticleController extends Controller {
 		while (true) {
 			System.out.printf("1. 영화 추천받기\n");
 			System.out.printf("2. 영화 예매하기\n");
+			System.out.printf("3. 영화 예매 일괄 취소하기\n");
 			System.out.printf("9. 이전 단계로\n\n");
 			System.out.printf("선택 : ");
 			int selectNum = sc.nextInt();
@@ -77,11 +83,48 @@ public class MovieArticleController extends Controller {
 			if (selectNum == 2) {
 				doTicketing();				
 			}
+			if (selectNum == 3) {
+				doAllCancel();				
+			}
 			else {
 				System.out.println("입력한 번호를 확인 후 다시 입력해주세요.\n");
 				continue;
 			}
 		}
+	}
+
+	private void doAllCancel() {
+		if (Container.getSession().isLogined() == false) {
+			System.out.println("로그인 후 이용해주세요.\n");
+			return;
+		}
+		Member loginedMember = Container.getSession().getLoginedMember();
+		List<Seat> seats = seatService.getSeats();
+		
+		if(loginedMember.loginId.equals("admin")==false) {
+			System.out.println("권한이 없습니다.");
+			return;
+		}
+		
+		Seat seat;
+		System.out.printf("=== === === S E A T S === === ===\n\n");
+		System.out.println(" 번호 | 날짜 | 영화 제목 | 좌석 ");
+		for (int i = 0; i <= seats.size() - 1; i++) {
+			seat = seats.get(i);
+
+			System.out.printf("%3d |%4s |%4s | %s\n", seat.id, seat.regDate , seat.movieTitle, seat.title);
+		}
+		System.out.println();
+		System.out.printf("1.취소하기\n");
+		System.out.printf("2.이전으로\n");
+		System.out.printf("입력 : ");
+		int menu = sc.nextInt();
+		
+		if(menu != 1) {
+			return;
+		}
+		seatService.doDeleteSeats();
+		System.out.println("일괄 취소되었습니다.");
 	}
 
 	private void doTicketing() {

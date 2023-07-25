@@ -84,4 +84,12 @@ public class SeatDao extends Dao {
 		return dbConnection.delete(sb.toString());
 	}
 	
+	public int deleteSeats() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("DELETE FROM seats "));
+		
+
+		return dbConnection.delete(sb.toString());
+	}
 }

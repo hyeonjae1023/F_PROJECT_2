@@ -30,6 +30,10 @@ public class SeatService {
 		return seatDao.deleteSeat(id);
 	}
 	
+	public int doDeleteSeats() {
+		return seatDao.deleteSeats();
+	}
+	
 	public List<Seat> getSeats() {
 		return seatDao.getSeats();
 	}

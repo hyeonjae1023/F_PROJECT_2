@@ -232,6 +232,12 @@ public class MemberController extends Controller {
 	}
 
 	private void withdrawal() {
+		
+		if (Container.getSession().isLogined() == false) {
+			System.out.println("로그인 후 이용해주세요.\n");
+			return;
+		}
+		
 		Member loginedMember = Container.getSession().getLoginedMember();
 		System.out.printf("비밀번호를 입력하세요 : ");
 		String loginPw = sc.next();
