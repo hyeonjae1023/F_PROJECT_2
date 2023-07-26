@@ -17,8 +17,8 @@ public class MovieArticleService {
 		return movieArticleDao.getMovieArticles();
 	}
 
-	public int write(int memberId, int boardId, String title, String body) {
-		MovieArticle movieArticle = new MovieArticle(memberId, boardId, title, body);
+	public int write(int price, String title, String body) {
+		MovieArticle movieArticle = new MovieArticle( price, title, body);
 		return movieArticleDao.write(movieArticle);
 	}
 
@@ -28,5 +28,9 @@ public class MovieArticleService {
 	
 	public MovieArticle getMovieArticle(int id) {
 		return movieArticleDao.getMovieArticle(id);
+	}
+	
+	public void delete(int id) {
+		movieArticleDao.delete(id);
 	}
 }

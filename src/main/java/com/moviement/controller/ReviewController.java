@@ -149,10 +149,11 @@ public class ReviewController extends Controller {
 		Review getReview = reviewService.getReview(choiceReviewId);
 		String nickName = getReview.name;
 		
-		if(loginedMember.nickName.equals(nickName)==false) {
-			System.out.println("권한이 없습니다.");
-			return;
+			if(loginedMember.nickName.equals(nickName)==false) {
+				System.out.println("권한이 없습니다.");
+				return;	
 		}
+			
 		reviewService.delete(choiceReviewId);
 		System.out.println("리뷰가 삭제되었습니다.");
 	}

@@ -13,6 +13,7 @@ import com.moviement.service.ReviewService;
 public class MemberController extends Controller {
 	private Scanner sc;
 	private int selectNum;
+	private int selectMovie;
 	private MemberService memberService;
 	private ReviewService reviewService;
 	private Session session;
@@ -254,26 +255,59 @@ public class MemberController extends Controller {
 	private void doModify() {
 		while (true) {
 			System.out.println("=== === === 회원 정보 수정 === === ===\n");
-			System.out.printf("1. 비밀번호 변경 \n");
-			System.out.printf("2. 이메일 변경 \n");
-			System.out.printf("3. 닉네임 변경 \n\n");
+			System.out.printf("1. 내 정보 \n");
+			System.out.printf("2. 비밀번호 변경 \n");
+			System.out.printf("3. 이메일 변경 \n");
+			System.out.printf("4. 닉네임 변경 \n\n");
 			System.out.printf("선택 : ");
 			int selectNum = sc.nextInt();
 			System.out.println();
 
 			switch (selectNum) {
 			case 1:
-				changeLoginPw();
+				showMe();
 				break;
 			case 2:
-				changeEmail();
+				changeLoginPw();
 				break;
 			case 3:
+				changeEmail();
+				break;
+			case 4:
 				changeNickName();
 				break;
+				default:
+					if (Container.getSession().isLogined() == false) {
+						System.out.println("로그인 후 이용해주세요.\n");
+						continue;
+					}
 			}
 			break;
 		}
+	}
+
+	private void showMe() {
+		Member loginedMember = Container.getSession().getLoginedMember();
+		System.out.printf("=== === === 내 정보 === === ===\n\n");
+		System.out.printf("서비스 이용 시작 날짜 : %s\n",loginedMember.regDate);
+		System.out.printf("이름 : %s\n",loginedMember.name);
+		System.out.printf("로그인 아이디 : %s\n",loginedMember.loginId);
+		System.out.printf("로그인 비밀번호 : %s\n",loginedMember.loginPw);
+		System.out.printf("Email : %s\n",loginedMember.eMail);
+		System.out.printf("닉네임 : %s\n",loginedMember.nickName);
+		System.out.println();
+		System.out.printf("1.이전으로 \n");
+		
+		while(true) {
+			System.out.print("입력 : ");
+			int menu = sc.nextInt();
+			if(menu != 1) {
+				System.out.println("다시 입력하세요.");
+				continue;
+			}
+			break;
+		}
+		
 	}
 
 	private void showTicket() {
@@ -290,27 +324,41 @@ public class MemberController extends Controller {
 		Seat seat;
 		for (int i = 0; i <= getForPrintSeat.size() - 1; i++) {
 			seat = getForPrintSeat.get(i);
+			selectMovie = seat.id;
 			System.out.printf("\n%d | %s | %s ",seat.id,seat.movieTitle, seat.title);
 		}
 		System.out.println("입니다.\n");
 		
-		System.out.println("취소할 예매 번호 선택 : ");
-		System.out.printf("입력 : ");
-		int menu2 = sc.nextInt();
-		
-		System.out.println("1. 예매 취소");
-		System.out.println("9. 초기 화면으로");
-		System.out.print("입력 : ");
-		int menu = sc.nextInt();
-		
-		// while 문 안에 넣기 참고
-		if (menu == 1) {
-			Container.seatService.doDeleteSeat(menu2);
-			System.out.println("예매가 취소 되었습니다.");
-			return;
+		int menu2 = 0;
+		while(true) {
+			System.out.println("취소할 예매 번호 선택 : ");
+			
+			menu2 = sc.nextInt();
+			if(menu2 > selectMovie) {
+				System.out.println("다시 입력하세요.");
+				continue;
+			}
+			break;
 		}
-		if (menu == 9) {
-			return;
+		
+		int menu = 0;
+		while(true) {
+			System.out.println("1. 예매 취소");
+			System.out.println("9. 초기 화면으로");
+			System.out.print("입력 : ");
+			menu = sc.nextInt();
+			if(menu!=1 && menu != 9) {
+				System.out.println("다시 입력하세요.");
+				continue;
+			}
+			if (menu == 1) {
+				Container.seatService.doDeleteSeat(menu2);
+				System.out.println("예매가 취소 되었습니다.");
+				return;
+			}
+			if (menu == 9) {
+				return;
+			}
 		}
 	}
 
@@ -373,16 +421,19 @@ public class MemberController extends Controller {
 
 		String nickName = null;
 
-		System.out.printf("변경할 닉네임 입력 : ");
-		nickName = sc.next();
+		while (true) {
+			System.out.printf("변경할 Email : ");
+			nickName = sc.next();
 
-		if (isJoinableNickName(nickName) == false) {
-			System.out.println("이미 사용중인 닉네임 입니다.\n");
-			return;
+			if (isJoinableNickName(nickName) == false) {
+				System.out.println("\n이미 사용중인 이메일 입니다.");
+				continue;
+			}
+			break;
 		}
 
-		memberService.modifyNickName(loginedMember.id, nickName);
-		System.out.println("\n닉네임이 변경 되었습니다.\n");
+		memberService.modifyNickName(loginedMember.id,nickName);
+		System.out.println("\n이메일이 변경 되었습니다.\n");
 	}
 
 	private void changeLoginPw() {
@@ -411,7 +462,7 @@ public class MemberController extends Controller {
 			break;
 		}
 
-		memberService.modifyLoginPw(loginPw);
+		memberService.modifyLoginPw(loginedMember.id, loginPw);
 		System.out.println("\n비밀번호가 변경 되었습니다.\n");
 	}
 
@@ -431,7 +482,7 @@ public class MemberController extends Controller {
 			break;
 		}
 
-		memberService.modifyEmail(eMail);
+		memberService.modifyEmail(loginedMember.id,eMail);
 		System.out.println("\n이메일이 변경 되었습니다.\n");
 	}
 }

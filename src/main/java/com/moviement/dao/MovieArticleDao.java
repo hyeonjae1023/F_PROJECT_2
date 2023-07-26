@@ -21,8 +21,8 @@ public class MovieArticleDao extends Dao {
 		sb.append(String.format("INSERT INTO movieArticle "));
 		sb.append(String.format("SET regDate = NOW(), "));
 		sb.append(String.format("title = '%s', ", movieArticle.title));
-		sb.append(String.format("memberId = '%d', ", movieArticle.memberId));
-		sb.append(String.format("boardId = '%d' ", movieArticle.boardId));
+		sb.append(String.format("`body` = '%s', ", movieArticle.body));
+		sb.append(String.format("price = '%d' ", movieArticle.price));
 
 		return dbConnection.insert(sb.toString());
 	}
@@ -54,5 +54,14 @@ public class MovieArticleDao extends Dao {
 			return null;
 		}
 		return new MovieArticle(row);
+	}
+	
+	public int delete(int id) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("DELETE FROM movieArticle "));
+		sb.append(String.format("WHERE id = '%d' ", id));
+
+		return dbConnection.delete(sb.toString());
 	}
 }

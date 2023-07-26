@@ -10,9 +10,8 @@ CREATE TABLE movieArticle (
 	id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	regDate DATETIME NOT NULL,
 	title CHAR(100) NOT NULL,
-	memberId INT(1) UNSIGNED NOT NULL,
-	boardId INT(1) UNSIGNED NOT NULL,
-	INDEX boardId (`boardId`)
+	`body` CHAR(100) NOT NULL,
+	price INT UNSIGNED NOT NULL
 );
 
 SELECT * FROM movieArticle;
@@ -20,38 +19,38 @@ SELECT * FROM movieArticle;
 INSERT INTO movieArticle
 SET regDate = '2023-05-31',
 title = '범죄도시3',
-memberId = 1,
-boardId = 1;
+`body` = '범죄 잡는 마동석',
+price = '15000';
 
 INSERT INTO movieArticle
 SET regDate = '2023-06-14',
 title = '엘리멘탈',
-memberId = 2,
-boardId = 2;
+`body` = '4원소들의 열정 넘치는 스토리',
+price = '15000';
 
 INSERT INTO movieArticle
 SET regDate = '2023-06-28',
 title = '여름날 우리',
-memberId = 3,
-boardId = 3;
+`body` = '너에게 풍덩 빠져버렸던 17살 여름',
+price = '15000';
 
 INSERT INTO movieArticle
 SET regDate = '2023-07-12',
 title = '미션 임파서블 : 데드 레코닝',
-memberId = 4,
-boardId = 4;
+`body` = '가장 위험한 작전!',
+price = '15000';
 
 INSERT INTO movieArticle
 SET regDate = '2023-07-19',
 title = '인시디어스 : 빨간 문',
-memberId = 5,
-boardId = 5;
+`body` = '램버트 가족이 다시 겪게 되는 끔찍한 악몽 이야기',
+price = '15000';
 
 INSERT INTO movieArticle
 SET regDate = '2023-07-20',
 title = '명탐정 코난 : 흑철의 어영',
-memberId = 6,
-boardId = 6;
+`body` = '믿고 보는 코난',
+price = '15000';
 
 SELECT * FROM movieArticle;
 
