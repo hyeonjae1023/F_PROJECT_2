@@ -65,6 +65,7 @@ public class MovieArticleController extends Controller {
 			System.out.printf("1. 영화 추천받기\n");
 			System.out.printf("2. 영화 예매하기\n");
 			System.out.printf("3. 영화 예매 일괄 취소하기\n");
+			System.out.printf("4. 영화 추가하기\n");
 			System.out.printf("9. 이전 단계로\n\n");
 			System.out.printf("선택 : ");
 			int selectNum = sc.nextInt();
@@ -181,6 +182,7 @@ public class MovieArticleController extends Controller {
 			switch (yesOrNo) {
 			case 1: // 여기서 진짜 예매 진행
 				Container.seatService.doTicketing(movieArticle.title,seatArr);
+				System.out.println("예매가 완료되었습니다. 예매 내역은 마이페이지에서 확인해주세요. 감사합니다.");
 				break;
 			case 9:
 				System.out.println("초기 화면으로 돌아갑니다.\n");

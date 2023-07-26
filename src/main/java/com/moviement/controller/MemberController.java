@@ -290,17 +290,24 @@ public class MemberController extends Controller {
 		Seat seat;
 		for (int i = 0; i <= getForPrintSeat.size() - 1; i++) {
 			seat = getForPrintSeat.get(i);
-			System.out.printf("\n%d | %s | %s \n",seat.id,seat.movieTitle, seat.title);
+			System.out.printf("\n%d | %s | %s ",seat.id,seat.movieTitle, seat.title);
 		}
 		System.out.println("입니다.\n");
-		System.out.println();
 		
-		System.out.printf("취소할 영화 선택 :  ");
-		
+		System.out.println("1. 예매 취소");
+		System.out.println("9. 초기 화면으로");
+		System.out.print("입력 : ");
 		int menu = sc.nextInt();
 		
-		Container.seatService.doDeleteSeat(menu);
-		System.out.println("예매가 취소 되었습니다.");
+		// while 문 안에 넣기 참고
+		if (menu == 1) {
+			Container.seatService.doDeleteSeat(menu);
+			System.out.println("예매가 취소 되었습니다.");
+			return;
+		}
+		if (menu == 9) {
+			return;
+		}
 	}
 
 	private void showReviewList() {
