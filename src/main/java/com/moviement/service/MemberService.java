@@ -40,8 +40,8 @@ public class MemberService {
 		memberDao.modifyLoginPw(loginPw);
 	}
 
-	public void modifyNickName(String nickName) {
-		memberDao.modifyNickName(nickName);
+	public void modifyNickName(int id, String nickName) {
+		memberDao.modifyNickName(id, nickName);
 	}
 	
 	public void delete(int id) {

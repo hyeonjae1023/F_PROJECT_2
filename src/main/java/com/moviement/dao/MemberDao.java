@@ -93,12 +93,13 @@ public class MemberDao {
 		return dbConnection.update(sb.toString());
 	}
 
-	public int modifyNickName(String nickName) {
+	public int modifyNickName(int id, String nickName) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(String.format("UPDATE `member` "));  //UPDATE `member`
-		sb.append(String.format("SET updateDate = NOW(), ")); // SET updateDate = NOW(), ""
-		sb.append(String.format("nickName = '%s' ", nickName)); // Email = '%s', ",Email
+		sb.append(String.format("SET updateDate = NOW(), "));
+//		sb.append(String.format("id = '%d', ", id)); // Email = '%s', ",Email
+		sb.append(String.format("nickName = '%s', ",nickName)); // SET updateDate = NOW(), ""
 		
 		return dbConnection.update(sb.toString());
 	}

@@ -248,7 +248,7 @@ public class MemberController extends Controller {
 		}
 		memberService.delete(loginedMember.id);
 		System.out.println("회원 탈퇴 하였습니다.");
-		
+		doLogout();
 	}
 
 	private void doModify() {
@@ -294,6 +294,10 @@ public class MemberController extends Controller {
 		}
 		System.out.println("입니다.\n");
 		
+		System.out.println("취소할 예매 번호 선택 : ");
+		System.out.printf("입력 : ");
+		int menu2 = sc.nextInt();
+		
 		System.out.println("1. 예매 취소");
 		System.out.println("9. 초기 화면으로");
 		System.out.print("입력 : ");
@@ -301,7 +305,7 @@ public class MemberController extends Controller {
 		
 		// while 문 안에 넣기 참고
 		if (menu == 1) {
-			Container.seatService.doDeleteSeat(menu);
+			Container.seatService.doDeleteSeat(menu2);
 			System.out.println("예매가 취소 되었습니다.");
 			return;
 		}
@@ -377,7 +381,7 @@ public class MemberController extends Controller {
 			return;
 		}
 
-		memberService.modifyNickName(nickName);
+		memberService.modifyNickName(loginedMember.id, nickName);
 		System.out.println("\n닉네임이 변경 되었습니다.\n");
 	}
 
